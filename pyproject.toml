@@ -1,0 +1,54 @@
+[project]
+name = "latent-drive"
+version = "0.1.0"
+description = "Foundation-model latent representations for passive dashcam video"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "matplotlib>=3.10,<4",
+    "numpy>=2.2,<3",
+    "pandas>=2.2,<4",
+    "pillow>=11,<13",
+    "pyarrow>=19,<23",
+    "scikit-learn>=1.6,<2",
+    "torch==2.11.0",
+    "torchcodec==0.17.0",
+    "tqdm>=4.67,<5",
+    "transformers==5.19.0",
+]
+
+[project.scripts]
+latent-drive = "latent_drive.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3,<10",
+    "ruff>=0.11,<1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }
+torchcodec = { index = "pytorch-cu130" }
+
+[tool.pytest.ini_options]
+addopts = "-q"
+markers = [
+    "gpu: requires a CUDA GPU and downloads model weights",
+]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
